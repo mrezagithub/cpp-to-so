@@ -63,7 +63,7 @@ double DateTimeStruct(const long* times, int size)
     #ifdef _WIN32
     localtime_s(&timeinfo, &now);
     #else
-    localtime_r( &nowو&timeinfo);
+    localtime_r( &now,&timeinfo);
     //localtime_r(&t, &tm_ptr);
     #endif
     
