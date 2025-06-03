@@ -1,5 +1,4 @@
-﻿#include "pch.h"
-#include "levelAIann.h"
+﻿#include "levelAIann.h"
 #include <vector>
 #include <algorithm>
 #include <cmath>
