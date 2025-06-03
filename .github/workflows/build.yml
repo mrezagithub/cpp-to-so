@@ -6,19 +6,23 @@ on:
       - main
 
 jobs:
-  build-so:
+  build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+
+    - name: Install build tools
+      run: sudo apt-get update && sudo apt-get install -y g++
 
     - name: Compile C++ code to .so
       run: |
-        mkdir build
-        g++ -fPIC -shared -o build/libmyliblevelAIann.so levelAIann.cpp
+        mkdir -p build
+        g++ -fPIC -shared -o build/liblevelAIann.so levelAIann.cpp
 
-    - name: Upload .so artifact
-      uses: actions/upload-artifact@v3
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
       with:
         name: libmylib
         path: build/libmylib.so
