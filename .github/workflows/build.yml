@@ -1,0 +1,24 @@
+name: Build Shared Library
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-so:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Compile C++ code to .so
+      run: |
+        mkdir build
+        g++ -fPIC -shared -o build/libmylib.so mylib.cpp
+
+    - name: Upload .so artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: libmylib
+        path: build/libmylib.so
