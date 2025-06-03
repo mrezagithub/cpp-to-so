@@ -79,7 +79,11 @@ double DateTimeStruct(const long* times, int size)
     {
         std::time_t t = times[i];
         std::tm tm_ptr = {};
-        localtime_s(&tm_ptr, &t); 
+        #ifdef _WIN32
+        (&tm_ptr, &t); 
+        #else
+        localtime_r(&t,&tm_ptr); 
+        #endif
         if (TimeAnalyze(tm_ptr))
             return INF;
         ptr += (long)&tm_ptr;
