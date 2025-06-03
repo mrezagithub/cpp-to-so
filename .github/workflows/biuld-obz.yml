@@ -1,4 +1,4 @@
-name: Obfuscated Shared Library Build
+name: Build Obfuscated SO (Docker OLLVM)
 
 on:
   push:
@@ -9,28 +9,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    container:
+      image: ghcr.io/zinclabs/ollvm-clang:latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y cmake ninja-build git
-
-    - name: Clone and build OLLVM (valid fork)
-      run: |
-        git clone --depth 1 https://github.com/owenstephens/obfuscator.git
-        cd obfuscator
-        mkdir build && cd build
-        cmake ../llvm -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_INSTALL_PREFIX=../ollvm
-        ninja
-        ninja install
-
-    - name: Build Obfuscated .so with OLLVM
+    - name: Build Obfuscated .so
       run: |
         mkdir -p build
-        ./obfuscator/ollvm/bin/clang++ -mllvm -sub -mllvm -bcf -mllvm -fla -fPIC -shared -o build/liblevelAIann.so levelAIann.cpp
+        clang++ -mllvm -sub -mllvm -bcf -mllvm -fla -fPIC -shared -o build/liblevelAIann.so levelAIann.cpp
 
     - name: Upload Obfuscated Artifact
       uses: actions/upload-artifact@v4
