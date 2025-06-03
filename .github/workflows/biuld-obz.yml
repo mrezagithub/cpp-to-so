@@ -1,0 +1,39 @@
+name: Obfuscated Shared Library Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y cmake ninja-build git
+
+    - name: Install OLLVM
+      run: |
+        git clone https://github.com/obfuscator-llvm/obfuscator.git
+        cd obfuscator
+        mkdir build && cd build
+        cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_INSTALL_PREFIX=../ollvm
+        ninja
+        ninja install
+
+    - name: Build Obfuscated .so
+      run: |
+        mkdir -p build
+        ./obfuscator/ollvm/bin/clang++ -mllvm -sub -mllvm -bcf -mllvm -fla -fPIC -shared -o build/liblevelAIann.so levelAIann.cpp
+
+    - name: Upload Obfuscated Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: levelAIann-obfuscated
+        path: ./build/liblevelAIann.so
