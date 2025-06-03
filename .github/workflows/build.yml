@@ -15,7 +15,7 @@ jobs:
     - name: Compile C++ code to .so
       run: |
         mkdir build
-        g++ -fPIC -shared -o build/libmylib.so mylib.cpp
+        g++ -fPIC -shared -o build/libmyliblevelAIann.so levelAIann.cpp
 
     - name: Upload .so artifact
       uses: actions/upload-artifact@v3
