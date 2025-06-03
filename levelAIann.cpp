@@ -1,12 +1,13 @@
-﻿#include "levelAIann.h"
+#include "levelAIann.h"
 #include <vector>
 #include <algorithm>
-#include <cmath>
-#include <vector>
 #include <cmath>
 #include <limits>
 #include <iostream>
 #include <ctime>
+
+double action = 0.0;
+const std::tm ZTIME = { 0,0,0,2,3,126,0,0,-1 }; 
 
 // Global buffers
 std::vector<double> sampleBuf;
@@ -59,7 +60,13 @@ double DateTimeStruct(const long* times, int size)
 {
     std::tm timeinfo = {};
     std::time_t now = std::time(nullptr);
+    #ifdef _WIN32
     localtime_s(&timeinfo, &now);
+    #else
+    localtime_r( &nowو&timeinfo);
+    //localtime_r(&t, &tm_ptr);
+    #endif
+    
 
     //std::time_t now = std::time(nullptr);
     //std::tm* localTime = std::localtime(&now);   
