@@ -18,16 +18,16 @@ jobs:
         sudo apt update
         sudo apt install -y cmake ninja-build git
 
-    - name: Install OLLVM
+    - name: Clone and build OLLVM (valid fork)
       run: |
-        git clone https://github.com/obfuscator-llvm/obfuscator.git
+        git clone --depth 1 https://github.com/owenstephens/obfuscator.git
         cd obfuscator
         mkdir build && cd build
-        cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_INSTALL_PREFIX=../ollvm
+        cmake ../llvm -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_INSTALL_PREFIX=../ollvm
         ninja
         ninja install
 
-    - name: Build Obfuscated .so
+    - name: Build Obfuscated .so with OLLVM
       run: |
         mkdir -p build
         ./obfuscator/ollvm/bin/clang++ -mllvm -sub -mllvm -bcf -mllvm -fla -fPIC -shared -o build/liblevelAIann.so levelAIann.cpp
